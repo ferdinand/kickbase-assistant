@@ -1,0 +1,27 @@
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_EXPLORE_PLAN_AGENTS": "1",
+    "CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS": "20"
+  },
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:ligainsider.de)",
+      "WebFetch(domain:www.ligainsider.de)",
+      "WebFetch(domain:kicker.de)",
+      "WebFetch(domain:www.kicker.de)",
+      "WebFetch(domain:bundesliga.com)",
+      "WebFetch(domain:www.bundesliga.com)",
+      "WebFetch(domain:transfermarkt.de)",
+      "WebFetch(domain:www.transfermarkt.de)",
+      "Read(screenshots/**)",
+      "Read(runs/**)",
+      "Write(runs/**)",
+      "Edit(runs/**)"
+    ],
+    "deny": [
+      "Agent(Explore)",
+      "Agent(Plan)"
+    ]
+  }
+}
