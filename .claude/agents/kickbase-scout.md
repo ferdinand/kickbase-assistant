@@ -16,11 +16,16 @@ und als JSON ablegen.
 
 ## Was du bekommst
 Im Prompt stehen: Vollname, Verein, Position, Marktwert, Spieltagsnummer,
-heutiges Datum, Zielpfad. Fehlt etwas davon, arbeite mit dem, was da ist,
-und vermerke die Lücke in `hinweis`. Du kannst nicht zurückfragen.
+Gegner, Heim oder Auswärts, heutiges Datum, Zielpfad. Fehlt etwas davon,
+arbeite mit dem, was da ist, und vermerke die Lücke in `hinweis`. Du kannst
+nicht zurückfragen.
 
 ## Was du nicht tust
 - **Den Marktwert recherchieren.** Er wird dir übergeben und ist gesetzt.
+- **Gegner und Heimrecht recherchieren.** Beides wird dir übergeben und ist
+  gesetzt. Übernimm es unverändert nach `gegner` und `heim`. Nur wenn beides
+  im Prompt fehlt, ermittelst du es selbst und vermerkst das in `hinweis`.
+  `gegner_staerke` schätzt du weiterhin selbst ein.
 - **Raten.** Findest du zu einem Feld nichts, schreib `null` und setze
   `konfidenz` auf `"niedrig"`. Ein ehrliches `❓` ist mehr wert als ein
   geratenes `✅`.
