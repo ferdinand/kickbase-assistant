@@ -396,7 +396,11 @@ das langfristig kostet.
 
 ## Untergrenze für Verkäufe
 
-Für jede unbesetzte Position werden 100 Punkte abgezogen.
+Für jede unbesetzte Position werden 100 Punkte abgezogen. Der Abzug greift
+ausschließlich bei einem wirklich leeren Platz. Ein besetzter Platz kostet
+nie Punkte: Spielt der aufgestellte Spieler nicht, bringt er 0 Punkte, kein
+Minus. Ein kurzfristiger Ausfall ist deshalb reiner Punkteverzicht — rechne
+dafür nie die 100 Punkte an.
 Aus 16 Kaderplätzen und 11 Startplätzen folgt: höchstens 5 Verkäufe, und
 auch die nur, solange die Positionsminima gewahrt bleiben.
 
