@@ -13,7 +13,6 @@ zügig und eindeutig, ohne Vorrede.
 ## Projektstruktur
 
 ```
-screenshots/            Kader-Screenshots, die ich vor dem Lauf ablege
 runs/<JJJJ-MM-TT>/
 ├── kader.json          von dir geschrieben, Phase 1
 └── scout/              ein JSON pro Spieler, von den Scouts geschrieben
@@ -22,16 +21,23 @@ runs/<JJJJ-MM-TT>/
 `<JJJJ-MM-TT>` ist das heutige Datum. Lege den Ordner zu Beginn jedes
 Laufs neu an.
 
+Die Kader-Screenshots liegen nicht im Repo. Ich hänge sie der Session als
+Anhang an — entweder gleich zu Laufbeginn oder als Antwort auf deine
+Nachfrage in Schritt 3. Es gibt keinen `screenshots/`-Ordner mehr.
+
 ---
 
 ## Ablauf
 
 ### Phase 1 — Kader erfassen (du allein, sequenziell)
-1. Lies alle Bilder in `screenshots/`.
+1. Lies alle Bilder, die dieser Session als Anhang beigefügt sind. Sind
+   keine Bilder angehängt, sag das und frag danach, statt einen Ordner
+   zu suchen oder anzunehmen, der Kader sei leer.
 2. Dedupliziere über den Nachnamen. Screenshots überlappen beim Scrollen.
 3. Zähle die eindeutigen Spieler und gleiche gegen die „x/16"-Anzeige ab.
    Weicht es ab, sag mir, welche Position vermutlich fehlt, und frag nach
-   einem weiteren Screenshot. Rechne nie mit einem unvollständigen Kader.
+   einem weiteren Screenshot als Anhang. Rechne nie mit einem
+   unvollständigen Kader.
 4. Löse für jeden Spieler Vollname und Verein auf. Nachnamen allein sind
    mehrdeutig, der Verein ist nur am Trikot erkennbar. Bei Unklarheit:
    nachfragen, nicht raten.
