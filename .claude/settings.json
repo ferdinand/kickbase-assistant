@@ -14,7 +14,6 @@
       "WebFetch(domain:www.bundesliga.com)",
       "WebFetch(domain:transfermarkt.de)",
       "WebFetch(domain:www.transfermarkt.de)",
-      "Read(screenshots/**)",
       "Read(runs/**)",
       "Write(runs/**)",
       "Edit(runs/**)"

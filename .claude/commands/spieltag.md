@@ -11,8 +11,8 @@ Das erste Argument ist mein Kontostand in Euro, negativ mit Minuszeichen.
 Alles Weitere sind Nachnamen meiner Behalten-Liste. Bleibt der Rest leer,
 ist die Behalten-Liste leer — frag nicht nach.
 
-Screenshots liegen in `screenshots/`. Lies alle Bilder in diesem Ordner.
-Sind dort keine, sag es und brich ab.
+Die Kader-Screenshots hänge ich dieser Session als Anhang an. Lies alle
+angehängten Bilder. Ist keines angehängt, sag es und brich ab.
 
 Arbeitsverzeichnis für diesen Lauf: `runs/<heutiges Datum>/`.
 Lege es an, bevor du Phase 1 beginnst.
