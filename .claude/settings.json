@@ -14,6 +14,7 @@
       "WebFetch(domain:www.bundesliga.com)",
       "WebFetch(domain:transfermarkt.de)",
       "WebFetch(domain:www.transfermarkt.de)",
+      "WebFetch(domain:api.openligadb.de)",
       "Read(runs/**)",
       "Write(runs/**)",
       "Edit(runs/**)"

@@ -30,10 +30,12 @@ Nachfrage in Schritt 3. Es gibt keinen `screenshots/`-Ordner mehr.
 ## Ablauf
 
 ### Phase 1 — Kader erfassen (du allein, sequenziell)
-1. Lies alle Bilder, die dieser Session als Anhang beigefügt sind. Sind
-   keine Bilder angehängt, sag das und frag danach, statt einen Ordner
-   zu suchen oder anzunehmen, der Kader sei leer.
-2. Dedupliziere über den Nachnamen. Screenshots überlappen beim Scrollen.
+1. Lies alle Bilder, die dieser Session als Anhang beigefügt sind, und
+   bestimme für jedes den Typ (siehe „Screenshot-Typen"). Sind keine
+   Bilder angehängt, sag das und frag danach, statt einen Ordner zu
+   suchen oder anzunehmen, der Kader sei leer.
+2. Dedupliziere über den Nachnamen — ausschließlich über die
+   SQUAD-Screenshots. Sie überlappen beim Scrollen.
 3. Zähle die eindeutigen Spieler und gleiche gegen die „x/16"-Anzeige ab.
    Weicht es ab, sag mir, welche Position vermutlich fehlt, und frag nach
    einem weiteren Screenshot als Anhang. Rechne nie mit einem
@@ -43,7 +45,11 @@ Nachfrage in Schritt 3. Es gibt keinen `screenshots/`-Ordner mehr.
    nachfragen, nicht raten.
 5. Ist etwas unleserlich, frag nach. Erfinde niemals Zahlen und schätze
    keine Marktwerte.
-6. Schreibe `runs/<datum>/kader.json`:
+6. Lies den Kontostand vom TRANSFERS-Screenshot ab (siehe „Kontostand
+   ablesen").
+7. Hol Spieltagsnummer und Paarungen von OpenLigaDB (siehe „Spieltag und
+   Gegner ermitteln").
+8. Schreibe `runs/<datum>/kader.json`:
 
 ```json
 [
@@ -60,33 +66,35 @@ Nachfrage in Schritt 3. Es gibt keinen `screenshots/`-Ordner mehr.
 ```
 
 ### Phase 2 — Recherche (Fan-out an Sub-Agents, parallel)
-7. Starte für **jeden** Spieler **einen** `kickbase-scout`-Agent. Alle
+9. Starte für **jeden** Spieler **einen** `kickbase-scout`-Agent. Alle
    Agent-Aufrufe in **einem einzigen Nachrichtenblock**, sonst laufen sie
    nacheinander statt parallel.
-8. Übergib jedem Scout im Prompt-String exakt:
-   Vollname, Verein, Position, Marktwert, Spieltagsnummer, heutiges Datum,
-   Zielpfad `runs/<datum>/scout/<nachname>.json`.
-9. Übergib **niemals**: Kontostand, Behalten-Liste, andere Spieler,
-   `aktuell_aufgestellt`, `s11_screenshot`, irgendeinen Teil dieser Datei
-   über die Recherche hinaus. Ein Scout, der den Kontostand kennt, fängt an
-   mitzuentscheiden. Ein Scout, der das Kickbase-Icon kennt, bestätigt es
-   nur noch — und du verlierst die unabhängige Zweitmeinung, die der ganze
-   Fan-out erzeugen soll.
-10. Warte alle Rückmeldungen ab. Liefert ein Scout kein JSON oder bricht
+10. Übergib jedem Scout im Prompt-String exakt:
+    Vollname, Verein, Position, Marktwert, Spieltagsnummer, Gegner,
+    Heim oder Auswärts, heutiges Datum,
+    Zielpfad `runs/<datum>/scout/<nachname>.json`.
+11. Übergib **niemals**: Kontostand, Behalten-Liste, andere Spieler,
+    `aktuell_aufgestellt`, `s11_screenshot`, irgendeinen Teil dieser Datei
+    über die Recherche hinaus. Ein Scout, der den Kontostand kennt, fängt an
+    mitzuentscheiden. Ein Scout, der das Kickbase-Icon kennt, bestätigt es
+    nur noch — und du verlierst die unabhängige Zweitmeinung, die der ganze
+    Fan-out erzeugen soll.
+12. Warte alle Rückmeldungen ab. Liefert ein Scout kein JSON oder bricht
     er ab, behandle den Spieler als
     `s11: "❓", konfidenz: "niedrig", hinweis: "Recherche fehlgeschlagen"`
     und rechne weiter. Ein unvollständiger Plan vor der Deadline schlägt
     einen perfekten danach. Nenne diese Spieler in Abschnitt 6.
-11. Lies alle Dateien aus `runs/<datum>/scout/`.
+13. Lies alle Dateien aus `runs/<datum>/scout/`.
 
 ### Phase 3 — Entscheidung (du allein, sequenziell)
-12. Verkaufsplan und Startelf nach den Regeln unten. Scouts entscheiden
+14. Verkaufsplan und Startelf nach den Regeln unten. Scouts entscheiden
     nichts, sie liefern nur Fakten. Widersprechen sich zwei Scouts, sagst
     du das offen, statt zu glätten.
 
-Fehlen mir Kontostand oder Behalten-Liste, frag danach, bevor du Phase 2
-startest. Recherche ohne diese Angaben ist trotzdem korrekt — die
-Entscheidung ohne sie nicht.
+Lässt sich der Kontostand weder ablesen noch einem Argument entnehmen, frag
+danach, bevor du Phase 2 startest — ebenso nach der Behalten-Liste.
+Recherche ohne diese Angaben ist trotzdem korrekt — die Entscheidung ohne
+sie nicht.
 
 ---
 
@@ -140,6 +148,89 @@ mit Spannen.
 
 ---
 
+## Screenshot-Typen
+
+Ich schicke zwei verschiedene Ansichten. Verwechsle sie nie — auf der einen
+steht mein Kader, auf der anderen stehen **fremde** Spieler.
+
+Verlass dich bei der Zuordnung nicht auf die Kopfzeile: Bei weiter
+gescrollten Screenshots fehlt sie. Die Zeilenmerkmale sind immer sichtbar.
+
+**SQUAD-Screen — mein Kader.** Quelle für Spieler, Marktwerte, S11-Icons und
+`aktuell_aufgestellt`.
+- Kopf: Tab „SQUAD" aktiv, Überschrift „MY PLAYERS" mit der „x/16"-Badge
+  daneben, rechts ein Sortier-Dropdown („MARKET VALUE")
+- gegliedert in Positionsgruppen: GOALKEEPER / DEFENDER / MIDFIELDER / FORWARD
+- **pro Zeile:** Marktwert rechts, **darunter die grüne oder rote
+  Buchgewinn-Zahl**. Kein Countdown, keine Ø-Punkte.
+
+**TRANSFERS-Screen — der Transfermarkt.** Ausschließlich Quelle für meinen
+Kontostand.
+- Kopf: Tab „TRANSFERS" aktiv, darunter BUY / MY BIDS / SELL
+- **pro Zeile:** Ø-Punkte rechts, Angebotspreis in einer eigenen Box mit
+  Icon, Restlaufzeit daneben („5m", „2h 45m"). **Keine** Buchgewinn-Zahl.
+- Trennzeilen wie „Gameweek 2" zwischen den Angeboten
+
+Die auf dem TRANSFERS-Screen gelisteten Spieler sind Angebote fremder
+Spieler, **nicht mein Kader**. Sie gehören nicht nach `kader.json`, nicht in
+den „x/16"-Abgleich, nicht in die Startelf und bekommen keinen Scout.
+Ignoriere dort ebenso: Ø-Punkte, Restlaufzeiten, Formpfeile, Augen-Icon und
+Angebotspreise.
+
+Im Zweifelsfall: **Buchgewinn-Zahl = mein Spieler. Countdown = fremdes
+Angebot.**
+
+---
+
+## Kontostand ablesen
+
+Der Kontostand steht auf dem TRANSFERS-Screen als eigene, farbig hinterlegte
+Badge mit ⓘ-Symbol — im unteren Bereich über der Navigationsleiste, abgesetzt
+von den Spielerzeilen, die er überlagert.
+
+- **Abgrenzung zu den übrigen Euro-Beträgen:** Ein Angebotspreis steht *in*
+  einer Spielerzeile, rechts neben Nachname und Positionskürzel. Der
+  Kontostand steht in keiner Spielerzeile.
+- **Format:** deutsche Tausenderpunkte, Minuszeichen nach dem Euro-Zeichen.
+  `€ -46.358.586` bedeutet `-46358586`. Rechne als ganze Euro, wie beim
+  Marktwert.
+- Die Badge ist immer da, auch im Plus — dann ohne Minuszeichen und in
+  anderer Farbe.
+- **Nenne den abgelesenen Betrag immer** in Abschnitt 0 und als Ausgangswert
+  in Abschnitt 3. Bei einer Zahl, deren Fehllesung mir den kompletten
+  Spieltag kostet, will ich die Sichtkontrolle.
+- Lässt sich die Badge nicht eindeutig identifizieren oder ist sie
+  unleserlich: nachfragen. Nimm nie ersatzweise einen Betrag aus einer
+  Spielerzeile.
+
+---
+
+## Spieltag und Gegner ermitteln
+
+Ein Aufruf pro Lauf, in Phase 1:
+`https://api.openligadb.de/getmatchdata/bl1`
+
+Er liefert den aktuellen Spieltag komplett — ohne Saisonangabe, die brauchst
+du nicht.
+
+- **Spieltagsnummer:** `group.groupOrderID`. Nicht aus einem Screenshot
+  ablesen, auch wenn dort „Gameweek x" steht.
+- **Gegner und Heimrecht:** Suche für jeden Verein aus `kader.json` sein
+  Spiel. `team1` ist die Heimmannschaft, `team2` die Gastmannschaft.
+- **Vereinsnamen abgleichen:** Die API schreibt sie aus („Borussia
+  Dortmund", „FC Bayern München"). Findest du keinen eindeutigen Treffer,
+  lass Gegner und Heimrecht für diesen Spieler leer und überlass die
+  Recherche dem Scout. Nimm nie den ähnlichsten Namen.
+- **Plausibilität:** Sind alle Spiele `matchIsFinished: true`, ist der
+  gelieferte Spieltag bereits gelaufen. Dann sag mir das und frag nach,
+  statt mit einer veralteten Nummer die Scouts zu starten.
+- Nenne die Spieltagsnummer in Abschnitt 0.
+
+Diese Abfrage ersetzt keine Terminrecherche — Anstoßzeiten interessieren
+mich nicht.
+
+---
+
 ## Screenshots richtig lesen
 
 Meine App ist auf Englisch. Positionen heißen GK, DEF, MF, FWD.
@@ -164,8 +255,9 @@ nutzen, um mir am Ende zu zeigen, was sich gegenüber meiner aktuellen Elf
 ändert. Deshalb steht es als `aktuell_aufgestellt` in `kader.json` — aber
 nicht im Scout-Prompt.
 
-Was nicht auf den Screenshots steht und was ich dir sage oder du erfragst:
-aktueller Kontostand, meine Behalten-Liste.
+Was auf keinem Screenshot steht und was ich dir sage oder du erfragst:
+meine Behalten-Liste. Den Kontostand liest du selbst ab, siehe „Kontostand
+ablesen".
 
 ---
 
@@ -189,6 +281,26 @@ Spieler davon betroffen sind.
 
 ## S11-Legende
 🔵 S11 sicher | ✅ S11 erwartet | ❓ S11 unsicher | ❗️ unwahrscheinlich | ✖️ ausgeschlossen
+
+So sehen die fünf Stufen in meiner App aus:
+
+| Icon im Screenshot | Bedeutung laut App | Legende |
+|---|---|---|
+| blauer Kreis, Funkeln | „Sicher: nahezu sicherer Starter" | 🔵 |
+| grüner Kreis, Haken | „Erwartet: klare Erwartung, Startformation" | ✅ |
+| oranger Kreis, Fragezeichen | „Unsicher: realistische Chancen, keine sichere Wahl" | ❓ |
+| **roter** Kreis, Ausrufezeichen | „Unwahrscheinlich: nicht erste Option, mögliche Alternative" | ❗️ |
+| **dunkelgrauer** Kreis, X | „Ausgeschlossen: keine realistische Chance" | ✖️ |
+
+Die beiden untersten Stufen unterscheiden sich an der **Farbe**, nicht nur an
+der Form. Sie zu verwechseln ist der teuerste Lesefehler: Aus der Startelf
+fallen beide, aber ❗️ ist laut App „mögliche Alternative" und rechtfertigt
+keinen Verkauf, während ✖️ nach der Verkaufslogik ganz oben auf der
+Kandidatenliste steht.
+
+Kickbase formuliert diese Einstufung ausdrücklich als eigene Prognose („gilt
+für uns", „aus unserer Sicht"). `s11_screenshot` ist deshalb nie ein harter
+Fakt, egal wie eindeutig das Icon wirkt.
 
 **Grundregel:** ❗️ und ✖️ gehören nicht in die Startelf.
 **Ventil:** Lässt sich eine Position nur mit ❗️ oder ✖️ besetzen, besetze sie
@@ -357,6 +469,8 @@ kurzfristig ausfallen, inklusive alternativer Formation.
 
 **0. Status**
 Modus: Kontostand sanieren oder Punkte maximieren.
+Abgelesener Kontostand und woher er stammt (Screenshot oder Argument).
+Spieltagsnummer aus der API.
 Anzahl erkannter Spieler gegen „x/16".
 Anzahl erfolgreicher Scout-Läufe, falls einer fehlgeschlagen ist.
 
